@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
 import {
   FlatList,
+  Keyboard,
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -21,10 +24,15 @@ const App = () => {
   const [todos, setTodos] = useState(getAllTodos());
   const [filterStatus, setFilterStatus] = useState('');
 
+  // Toast for addedTodo
+  const showToast = () => {
+    ToastAndroid.show('Added todo successfully', ToastAndroid.SHORT);
+  };
   // ADD NEW TO
   const handleAddTodo = () => {
     addNewTodo(Math.floor(Math.random() * 500), text);
     setTodos(getAllTodos());
+    showToast();
   };
 
   // Handle delete
@@ -41,55 +49,57 @@ const App = () => {
     console.log(filterByStatus(status));
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>MY TODO</Text>
-      <View style={styles.content}>
-        <Text>REACT NATIVE APP</Text>
-        <TextInput
-          onChangeText={val => setText(val)}
-          style={styles.textInput}
-          placeholder="e.g Eating lunch"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleAddTodo}>
-          <FontAwesomeIcon icon={faPlus} size={20} style={{color: '#fff'}} />
-          <Text style={styles.buttonText}>ADD TODO</Text>
-        </TouchableOpacity>
-        {/* FILTER BY */}
-        <View style={styles.filter}>
-          <Text style={styles.filtertext}> Filter By:</Text>
-          <TouchableOpacity onPress={() => handleFilter('closed')}>
-            <Text style={styles.filterKeyword}> Done</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilter('open')}>
-            <Text style={styles.filterKeyword}>Not done</Text>
-          </TouchableOpacity>
-        </View>
-        {todos == '' ? (
-          <Text style={styles.emptyList}>
-            You have no plans today. Start by adding a new todo
-          </Text>
-        ) : (
-          <FlatList
-            style={styles.todoList}
-            data={todos}
-            keyExtractor={item => item._id}
-            renderItem={({item}) => (
-              <View style={styles.todoItem}>
-                <Text style={styles.todoName}>{item.name}</Text>
-                <Text style={styles.todoName}>{item.status}</Text>
-                <TouchableOpacity onPress={() => handleDelete(item._id)}>
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    size={20}
-                    style={{color: 'red'}}
-                  />
-                </TouchableOpacity>
-              </View>
-            )}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <Text style={styles.header}>MY TODO</Text>
+        <View style={styles.content}>
+          <Text>REACT NATIVE APP</Text>
+          <TextInput
+            onChangeText={val => setText(val)}
+            style={styles.textInput}
+            placeholder="e.g Eating lunch"
           />
-        )}
+          <TouchableOpacity style={styles.button} onPress={handleAddTodo}>
+            <FontAwesomeIcon icon={faPlus} size={20} style={{color: '#fff'}} />
+            <Text style={styles.buttonText}>ADD TODO</Text>
+          </TouchableOpacity>
+          {/* FILTER BY */}
+          <View style={styles.filter}>
+            <Text style={styles.filtertext}> Filter By:</Text>
+            <TouchableOpacity onPress={() => handleFilter('closed')}>
+              <Text style={styles.filterKeyword}> Done</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleFilter('open')}>
+              <Text style={styles.filterKeyword}>Not done</Text>
+            </TouchableOpacity>
+          </View>
+          {todos == '' ? (
+            <Text style={styles.emptyList}>
+              You have no plans today. Start by adding a new todo
+            </Text>
+          ) : (
+            <FlatList
+              style={styles.todoList}
+              data={todos}
+              keyExtractor={item => item._id}
+              renderItem={({item}) => (
+                <View style={styles.todoItem}>
+                  <Text style={styles.todoName}>{item.name}</Text>
+                  <Text style={styles.todoName}>{item.status}</Text>
+                  <TouchableOpacity onPress={() => handleDelete(item._id)}>
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      size={20}
+                      style={{color: 'red'}}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          )}
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
