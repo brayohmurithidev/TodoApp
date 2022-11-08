@@ -26,8 +26,9 @@ const deleteTodo = id => {
 };
 
 // Filter by closed or open
-const filterByStatus = status => {
-  getAllTodos().filter(`status=${status}`);
+const filterByStatus = stat => {
+  const filtered = getAllTodos().filtered(`status='${stat}'`);
+  return filtered;
 };
 
-export {addNewTodo, getAllTodos, deleteTodo};
+export {addNewTodo, getAllTodos, deleteTodo, filterByStatus};
