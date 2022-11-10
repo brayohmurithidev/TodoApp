@@ -4,7 +4,7 @@ const TaskSchema = {
   properties: {
     _id: 'int',
     name: 'string',
-    status: 'string?',
+    is_complete: 'bool',
   },
   primaryKey: '_id',
 };

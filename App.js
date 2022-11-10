@@ -22,11 +22,10 @@ import {
 const App = () => {
   const [text, setText] = useState('');
   const [todos, setTodos] = useState(getAllTodos());
-  const [filterStatus, setFilterStatus] = useState('');
 
   // Toast for addedTodo
   const showToast = () => {
-    ToastAndroid.show('Added todo successfully', ToastAndroid.SHORT);
+    ToastAndroid.show('Added todo successfully', ToastAndroid.TOP);
   };
   // ADD NEW TO
   const handleAddTodo = () => {
@@ -66,10 +65,10 @@ const App = () => {
           {/* FILTER BY */}
           <View style={styles.filter}>
             <Text style={styles.filtertext}> Filter By:</Text>
-            <TouchableOpacity onPress={() => handleFilter('closed')}>
+            <TouchableOpacity onPress={() => handleFilter(true)}>
               <Text style={styles.filterKeyword}> Done</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleFilter('open')}>
+            <TouchableOpacity onPress={() => handleFilter(false)}>
               <Text style={styles.filterKeyword}>Not done</Text>
             </TouchableOpacity>
           </View>
@@ -85,7 +84,7 @@ const App = () => {
               renderItem={({item}) => (
                 <View style={styles.todoItem}>
                   <Text style={styles.todoName}>{item.name}</Text>
-                  <Text style={styles.todoName}>{item.status}</Text>
+                  <Text style={styles.todoName}>{item.is_complete}</Text>
                   <TouchableOpacity onPress={() => handleDelete(item._id)}>
                     <FontAwesomeIcon
                       icon={faTrash}

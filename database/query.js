@@ -2,12 +2,12 @@ import Realm from 'realm';
 import realm from './db';
 
 // CREATE TASKS
-const addNewTodo = (id, _name, _status = 'open') => {
+const addNewTodo = (id, _name, _is_complete = false) => {
   realm.write(() => {
     realm.create('Task', {
       _id: id,
       name: _name,
-      status: _status,
+      is_complete: _is_complete,
     });
   });
 };
@@ -27,8 +27,23 @@ const deleteTodo = id => {
 
 // Filter by closed or open
 const filterByStatus = stat => {
-  const filtered = getAllTodos().filtered(`status='${stat}'`);
+  const filtered = getAllTodos().filtered(`is_complete=${stat}`);
   return filtered;
 };
 
-export {addNewTodo, getAllTodos, deleteTodo, filterByStatus};
+// Update
+const updateTodoStatus = (id, is_checked) => {
+  realm.write(() => {
+    let todo = realm.objectForPrimaryKey('Task', id);
+    todo.is_complete = is_checked;
+  });
+};
+
+// Delete all records
+const deleteAllTodos = () => {
+  realm.write(() => {
+    realm.delete(realm.objects('Task'));
+  });
+};
+
+export {addNewTodo, getAllTodos, deleteTodo, filterByStatus, updateTodoStatus};
